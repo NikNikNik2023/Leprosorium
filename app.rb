@@ -26,7 +26,9 @@ end
 
 get '/' do
 	# Выбираем список постов из БД
+
 	@results = @db.execute 'select * from Posts order by id desc'
+
 	erb :index
 end
 
@@ -43,15 +45,30 @@ post '/new' do
 	end
 
 	# Сохранение записей в Базу данных
+
 	@db.execute 'insert into Posts (content, created_date) values (?, datetime())', [content]
 
 	redirect to '/'
 end
 
 # Вывод информации о посте
+
 get '/details/:post_id' do
+
+	# получаем переменную из url
+
 	post_id = params[:post_id]
+
+	# получаем список постов
+	# у нас будет только один пост
+
 	results = @db.execute 'select * from Posts where id = ?', [post_id]
+
+	# Выбираем этот один пост в переменную @row
+
 	@row = results[0]
+
+	# Возвращаем представление details.erb
+
 	erb :details
 end
